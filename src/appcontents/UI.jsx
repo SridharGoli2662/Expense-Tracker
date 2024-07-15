@@ -1,39 +1,38 @@
-import { get, set } from "firebase/database";
-import { useEffect, useId, useState } from "react";
+import { useEffect,useState } from "react";
 import{History} from '../appcontents/lasttransactions'
 import{BalanceCard} from '../appcontents/balancecard'
 import {styled} from 'styled-components';
 import{useFormik} from 'formik'
 import * as yupmeths from 'yup'
-import { AuthErrorCodes, onAuthStateChanged } from "firebase/auth";
-import { addDoc, collection, doc, getDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { addDoc, collection, doc } from "firebase/firestore";
 import{auth,db} from '../firebasesetup/config';
 
 export function UserInterface() {
     const[getuserstatus,setuserstatus]=useState({});
+    //after athentication setting userId
     useEffect(()=>{
         // console.log(auth.currentUser)
         // async function gettinguid()
         // {
         //     // const userid= await auth.currentUser; 
-            if(auth.currentUser)
-                {
-                    // console.log(true)
-                     setuserstatus( auth.currentUser.uid)
-                    console.log("userid is setted")
-                    console.log(auth.currentUser.uid)
-                 }
-        //     else{
-        //             console.log("this  is not working man")
-        //         }
-        // }
+            // if(auth.currentUser)
+            //     {
+            //         // console.log(true)
+            //          setuserstatus( auth.currentUser.uid)
+            //         console.log("userid is setted")
+            //         console.log(auth.currentUser.uid)
+            //      }
+            // else{
+            //         console.log("this  is not working man")
+            //     }
         const unsubscribe = onAuthStateChanged(auth,(user) => {
             if (user) {
                 setuserstatus(user.uid);
             } else {
                 console.log("User is not authenticated");
             }
-            // console.log(user);
+            console.log(user);
         });
         return () => unsubscribe();
     },[])
@@ -63,18 +62,6 @@ export function UserInterface() {
             }
         },
     })
-//    const handlechange=(e)=>{
-//     const{name,value}=e.target;
-//     setdata((previous)=>({
-//         ...previous,
-//         [name]:value
-//     }))
-//    }
-    // function handlesubmit(e)
-    // {
-    //     e.preventDefault();
-    //     // alert(JSON.stringify(getdata))
-    // }
     const datasubmission=async(userid,data)=>{
         const documetnreference=doc(db,'users',userid);
         const newcollection=collection(documetnreference,'transactions');
@@ -86,7 +73,7 @@ export function UserInterface() {
             <BalanceCard></BalanceCard>
             {/* <h2>This is the main page for my application</h2> */}
             <Responsive>
-            <Form_style>
+            <Formstyle>
                 <form className="needs-validation"  onSubmit={formik.handleSubmit}>
                     <div className="d-flex flex-column justify-content-center w-75 m-auto">
                      <label htmlFor="description" style={{margin:'6px'}}>Description</label>
@@ -116,14 +103,13 @@ export function UserInterface() {
                     <button type="submit">ADD</button>
                     </div>
                 </form>
-                </Form_style>
-            
+                </Formstyle>      
                 <History data={{getuserstatus}}></History>
                 </Responsive>
         </div>
     )
 }
-const Form_style=styled.div`
+const Formstyle=styled.div`
     background-color: #A8DADC;
     width: 35vw;
     margin: auto auto;
@@ -150,8 +136,5 @@ const Responsive=styled.div`
 display: flex;
     @media (max-width:800px){
         display: block;
-        /* width: 100vw; */
-        /* display: ""; */
-        /* background-color: red; */
     }
 `

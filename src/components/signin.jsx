@@ -1,17 +1,23 @@
 import { useState } from "react";
 import { auth } from "../firebasesetup/config";
 import{signInWithEmailAndPassword} from 'firebase/auth';
+import{Home}from '../appcontents/home'
 export function SignIn()
 {
     const[getdata,setdata]=useState({email:"",password:""});
     const[geterror,seterror]=useState('')
-    async function onhandlesubmit(e)
+   async function onhandlesubmit(e)
     {
         e.preventDefault();
         seterror('')
         console.log(getdata)
         try{
-          await signInWithEmailAndPassword(auth,getdata.email,getdata.password)
+         const prob=await signInWithEmailAndPassword(auth,getdata.email,getdata.password)
+         console.log(prob.user)
+          // console.log(userstatus.uid)
+        //  .then((x)=>{
+        //   console.log(x)
+        //  })
         }
         catch(err)
         {

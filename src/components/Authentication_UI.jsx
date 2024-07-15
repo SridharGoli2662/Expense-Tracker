@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {SignIn} from './signin';
 import {SignUp} from './signup';
 import {styled} from 'styled-components';
-export function UserAthenticaion_UI()
+export function UserAthenticaionUI()
 {
     const[getbtnvalue,setbtnvalue]=useState(false);
     const[getstyle,setstyle]=useState('')
@@ -14,7 +14,7 @@ export function UserAthenticaion_UI()
     //    console.log(getbtnvalue)
       setstyle('red');
     //    setstyle
-    console.log(getstyle)
+    // console.log(getstyle)
     }
     return(
         <Loginui className="" style={{width:'50vw',border:'2px solid black'}} >
@@ -24,10 +24,7 @@ export function UserAthenticaion_UI()
             </div>
             <div>LoginDetails
             {getbtnvalue?<SignUp></SignUp>:<SignIn></SignIn>}
-         
             </div>
-
-
         </Loginui>
     )
 }

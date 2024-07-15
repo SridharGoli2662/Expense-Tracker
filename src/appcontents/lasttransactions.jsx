@@ -1,23 +1,15 @@
-import {styled,createGlobalStyle} from 'styled-components'
-import{db,auth} from '../firebasesetup/config';
-import { collection ,deleteAllPersistentCacheIndexes,deleteDoc,doc,getDoc, getDocs,onSnapshot,orderBy,query} from 'firebase/firestore';
+import {styled} from 'styled-components'
+import{db} from '../firebasesetup/config';
+import { collection ,deleteDoc,doc,onSnapshot,orderBy,query} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { getRedirectResult } from 'firebase/auth';
-import { get } from 'firebase/database';
-import { connectStorageEmulator } from 'firebase/storage';
 export function History(props)
 {
         const[getdata,setdata]=useState([]);
-        // const[userid,setuserid]=useState({});
         const userid=props.data.getuserstatus;
        async function deletion(x)
         {
-            // console.log(x)
-            //deletion logic   
-            //need document from user documents collection
-            // getdata.map(async (document)=>{
-                try{
-                     //getting userdocument from users collection 
+         try{
+            //getting userdocument from users collection 
                         const userref=doc(db,"users",userid)
                     //getting every transaction document using document id from transactions collection
                         const userefff=doc(userref,'transactions',x)
@@ -29,26 +21,17 @@ export function History(props)
                 {
                     console.log("error occured while deleting"+err)
                 }
-            // })
-            // console.log(getdata)
         }
-        // const deletion=(x)=>{
-        //     console.log(x)
-        // }
         useEffect(()=>{
-            // setuserid({id});
-            // console.log(id);
                     async function gettingdata()
                     {
                         try{
-                            const userref=doc(db,"users",userid) //user document from users collection
-                        const getuserf=query(collection(userref,'transactions'),orderBy('date','desc')) //getting transactions collections
-                        // const usecollec=await getDocs(getuserf)
-                        //   console.log(usecollec)
-                        // const ordered=query(getDocs(userref),orderBy('date','desc'));
-                        // console.log(ordered);
+                             //user document from users collection
+                            const userref=doc(db,"users",userid)
+                            //getting transactions collections
+                        const getuserf=query(collection(userref,'transactions'),orderBy('date','desc')) 
+                        //dynamically updating transactions
                         onSnapshot(getuserf,(documents)=>{
-                            // console.log(documents.orderby())
                             const document=documents.docs.map((x)=>{
                                 // console.log(x)
                                 return{
@@ -56,10 +39,8 @@ export function History(props)
                                     ...x.data()
                                 }
                             })
-                            // console.log(document)
                             setdata(document)
                         })
-                        // console.log(livedb)
                     }
                     catch(err)
                     {
@@ -68,10 +49,8 @@ export function History(props)
                 }
                 gettingdata()
             },[userid])
-            console.log(getdata)
     return(
         <Historycontainer className=' text-white '>
-           
             <h2>Transactions</h2>
             {
                 getdata.map((x)=>
@@ -83,7 +62,7 @@ export function History(props)
                  </div>
                  <div className='d-flex gap-3  text-align-right'>
                     <h3>{x.amount}</h3>
-                   <img style={{cursor:'pointer'}} onClick={()=>deletion(x.id)} value={x.id} src='delete.png'></img>
+                   <img alt='deleteIcon' style={{cursor:'pointer'}} onClick={()=>deletion(x.id)} value={x.id} src='delete.png'></img>
                  </div>
                  </TansctionHistory>
                 )
@@ -91,16 +70,16 @@ export function History(props)
         </Historycontainer>
     )
 }
-const Fontstyle=createGlobalStyle`
-@font-face {
-    font-family: 'MyFont';
-    src: url('https://fonts.googleapis.com/css2?family=Ga+Maamli&display=swap') format('woff2');
-    font-weight: 400;
-}
-body{
-    font-family:'MyFont';
-}
-`
+// const Fontstyle=createGlobalStyle`
+// @font-face {
+//     font-family: 'MyFont';
+//     src: url('https://fonts.googleapis.com/css2?family=Ga+Maamli&display=swap') format('woff2');
+//     font-weight: 400;
+// }
+// body{
+//     font-family:'MyFont';
+// }
+// `
 const TansctionHistory=styled.div`
     background-color: #aae0ec;
     color: black;
